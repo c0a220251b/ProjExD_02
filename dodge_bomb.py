@@ -62,7 +62,7 @@ def main():
             if event.type == pg.QUIT: 
                 return
         
-        if kk_rct.colliderect(bb_rct):
+        if kk_rct.colliderect(bb_rct):  # 追加3:着弾するとこうかとん画像が切り替わる
             screen.blit(bg_img, [0, 0])
             screen.blit(kk_img_over, kk_rct)
             pg.display.update()
