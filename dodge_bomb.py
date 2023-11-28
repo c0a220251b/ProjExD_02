@@ -31,6 +31,8 @@ def main():
     bg_img = pg.image.load("ex02/fig/pg_bg.jpg")
     kk_img = pg.image.load("ex02/fig/3.png")
     kk_img = pg.transform.rotozoom(kk_img, 0, 2.0)
+    kk_img_over = pg.image.load("ex02/fig/4.png")
+    kk_img_over = pg.transform.rotozoom(kk_img_over, 0, 2.0)
     kk_rct = kk_img.get_rect()  #練習3
     kk_rct.center = 900, 400  #練習3
     bb_img = pg.Surface((20, 20))  # 練習1　
@@ -49,16 +51,20 @@ def main():
                 return
         
         if kk_rct.colliderect(bb_rct):
+            screen.blit(bg_img, [0, 0])
+            screen.blit(kk_img_over, kk_rct)
+            pg.display.update()
+            clock.tick(5)
             print("Game Over")
             return
-            
+             
         key_lst = pg.key.get_pressed()
         sum_mv = [0, 0]  # 練習3: 合計移動量
         for k, tpl in delta.items():
             if key_lst[k]:  # 練習3キーが押されたら
                 sum_mv[0] += tpl[0]
                 sum_mv[1] += tpl[1]
-        
+                        
         screen.blit(bg_img, [0, 0])
         kk_rct.move_ip(sum_mv[0], sum_mv[1])  # 練習3
         if check_bound(kk_rct) != (True, True):  # 練習4
