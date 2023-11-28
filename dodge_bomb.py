@@ -2,7 +2,6 @@ import sys
 import random
 import pygame as pg
 
-
 WIDTH, HEIGHT = 1250, 650
 
 delta = {  # 練習3
