@@ -3,7 +3,7 @@ import random
 import pygame as pg
 
 
-WIDTH, HEIGHT = 1200, 600
+WIDTH, HEIGHT = 1250, 650
 
 delta = {  # 練習3
     pg.K_UP: (0, -5),
@@ -12,6 +12,18 @@ delta = {  # 練習3
     pg.K_RIGHT: (+5, 0)
 }
 
+def check_bound(rct: pg.Rect) -> tuple[bool, bool]:  # 練習4
+    """
+    オブジェクトが画面内or画面外を判定し、真理値タプルを消す関数
+    引数 rct:　こうかとんor爆弾SurfaceのRect
+    戻り値:横方向、縦方向判定結果 (画面内：True/画面外：False)
+    """
+    yoko, tate = True, True
+    if rct.left < 0 or WIDTH < rct.right:
+        yoko = False
+    if rct.top < 0 or HEIGHT < rct.bottom:
+        tate = False
+    return yoko, tate 
 
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
@@ -19,8 +31,8 @@ def main():
     bg_img = pg.image.load("ex02/fig/pg_bg.jpg")
     kk_img = pg.image.load("ex02/fig/3.png")
     kk_img = pg.transform.rotozoom(kk_img, 0, 2.0)
-    kk_rct = kk_img.get_rect()
-    kk_rct.center = 900, 400
+    kk_rct = kk_img.get_rect()  #練習3
+    kk_rct.center = 900, 400  #練習3
     bb_img = pg.Surface((20, 20))  # 練習1　
     bb_img.set_colorkey((0, 0, 0))  #練習1
     pg.draw.circle(bb_img, (255, 0, 0), (10, 10), 10)  # 練習1
@@ -43,9 +55,17 @@ def main():
                 sum_mv[1] += tpl[1]
         
         screen.blit(bg_img, [0, 0])
-        kk_rct.move_ip(sum_mv[0], sum_mv[1])
-        screen.blit(kk_img, kk_rct)
+        kk_rct.move_ip(sum_mv[0], sum_mv[1])  # 練習3
+        if check_bound(kk_rct) != (True, True):  # 練習4
+            kk_rct.move_ip(-sum_mv[0], -sum_mv[1])  
+        screen.blit(kk_img, kk_rct)  #練習3
         bb_rct.move_ip(vx, vy)  # 練習2
+        yoko, tate = check_bound(bb_rct)
+        if not yoko:  # 練習4
+            vx *= -1
+        if not tate:  # 練習4
+            vy *= -1
+        bb_rct.move_ip(vx, vy)  # 練習4
         screen.blit(bb_img, bb_rct)  # 練習1
         pg.display.update()
         tmr += 1
